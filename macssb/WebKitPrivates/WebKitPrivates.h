@@ -1,0 +1,6 @@
+#import "WKPreferencesPrivate.h"
+#import "_WKDownloadDelegate.h"
+#import "WKProcessPoolPrivate.h"
+#import "WKDownload.h"
+#import "_WKDownload.h"
+#import "WKWebViewPrivate.h"

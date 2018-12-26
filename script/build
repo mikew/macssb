@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -ex
+
+PATH_CONFIG="./macssb/Assets.xcassets/config.dataset/config.json"
+
+build-single-app () {
+  site_config="$1"
+  site_dir="$(dirname "${site_config}")"
+  TARGET_NAME="$(basename "${site_dir}")"
+  TARGET_NAME_SPACED="${TARGET_NAME//_/ }"
+
+  # Copy app config
+  cp "${site_config}" "${PATH_CONFIG}"
+
+  # Build AppIcon
+  ./script/make-appicon "${site_dir}/icon.png" macssb/Assets.xcassets/AppIcon.appiconset/
+
+  # Build app and set TARGET_NAME
+  xcodebuild -target macssb -project macssb.xcodeproj/ -configuration Release build "TARGET_NAME=${TARGET_NAME_SPACED}"
+
+  # Move to final place
+  mkdir -p ./sites-build/
+  rm -rf "./sites-build/${TARGET_NAME_SPACED}.app"
+  mv "./build/Release/${TARGET_NAME_SPACED}.app" ./sites-build/
+}
+
+if [ -n "$1" ]; then
+  build-single-app "$1/config.json"
+else
+  find ./sites -name 'config.json' | while read -r line; do
+    build-single-app "${line}"
+  done
+fi
+
+# Due to how the build script works, we need to replace changed assets with the
+# defaults
+cp "./sites/Example/config.json" "${PATH_CONFIG}"
+./script/make-appicon "./sites/Example/icon.png" macssb/Assets.xcassets/AppIcon.appiconset/
+

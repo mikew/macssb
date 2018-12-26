@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+set -ex
+
+SRC_IMAGE="$1"
+DEST_DIR="$2"
+
+[ -z "${SRC_IMAGE}" ] && exit 1
+[ -z "${DEST_DIR}" ] && exit 1
+
+mkdir -p "${DEST_DIR}"
+
+convert "${SRC_IMAGE}" -resize 16x16 "${DEST_DIR}/Icon-16.png"
+convert "${SRC_IMAGE}" -resize 32x32 "${DEST_DIR}/Icon-32.png"
+convert "${SRC_IMAGE}" -resize 64x64 "${DEST_DIR}/Icon-64.png"
+convert "${SRC_IMAGE}" -resize 128x128 "${DEST_DIR}/Icon-128.png"
+convert "${SRC_IMAGE}" -resize 256x256 "${DEST_DIR}/Icon-256.png"
+convert "${SRC_IMAGE}" -resize 512x512 "${DEST_DIR}/Icon-512.png"
+convert "${SRC_IMAGE}" -resize 1024x1024 "${DEST_DIR}/Icon-1024.png"
+
+cat <<-EOF > "${DEST_DIR}/Contents.json"
+{
+  "images" : [
+    {
+      "size" : "16x16",
+      "idiom" : "mac",
+      "filename" : "Icon-16.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "16x16",
+      "idiom" : "mac",
+      "filename" : "Icon-32.png",
+      "scale" : "2x"
+    },
+    {
+      "size" : "32x32",
+      "idiom" : "mac",
+      "filename" : "Icon-32.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "32x32",
+      "idiom" : "mac",
+      "filename" : "Icon-64.png",
+      "scale" : "2x"
+    },
+    {
+      "size" : "128x128",
+      "idiom" : "mac",
+      "filename" : "Icon-128.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "128x128",
+      "idiom" : "mac",
+      "filename" : "Icon-256.png",
+      "scale" : "2x"
+    },
+    {
+      "size" : "256x256",
+      "idiom" : "mac",
+      "filename" : "Icon-256.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "256x256",
+      "idiom" : "mac",
+      "filename" : "Icon-512.png",
+      "scale" : "2x"
+    },
+    {
+      "size" : "512x512",
+      "idiom" : "mac",
+      "filename" : "Icon-512.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "512x512",
+      "idiom" : "mac",
+      "filename" : "Icon-1024.png",
+      "scale" : "2x"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}
+EOF
+
